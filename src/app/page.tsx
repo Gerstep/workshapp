@@ -1,26 +1,31 @@
 'use client';
 
-import { useChat } from 'ai/react';
+/*
+  This application is an AI-powered design thinking facilitation tool. It helps teams to generate ideas, discuss them, and select the best ones. AI is used to help in deliberation and generation of ideas, as well as synthesis of the the insights.
 
-export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  To do:
+  - Explain workshop task to the user
+  - Generate links for multiple users to join the workshop
+  - Collect ideas from users
+  - Generate insights from the ideas
+
+*/
+
+const questions = [
+  "What is the problem we are trying to solve?",
+  "What are the possible solutions?",
+  "What are the pros and cons of each solution?",
+  "What is the best solution?",
+]
+
+export default function Workshop() {
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {messages.map(m => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
-        </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
+      <ul>
+        {questions.map((question, index) => (
+          <li key={index}>{question}</li>
+        ))}
+      </ul>
     </div>
   );
 }
