@@ -65,7 +65,7 @@ export default function WorkshopPage() {
       <ul>
         {workshops.map((workshop) => (
           <li key={workshop.id} className="mb-2">
-            <Link href={`/workshop/${workshop.id}`} key={workshop.id}>
+            <Link href={`/workshop/${workshop.id}`}>
               {workshop.title}
             </Link>
           </li>
