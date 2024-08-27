@@ -42,7 +42,7 @@ export default function HMWPage() {
 
   return (
     <div className="flex flex-col w-full max-w-4xl py-24 mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Generate HMWs</h1>
+      <h1 className="text-2xl font-bold mb-4">Generate How Might We statements</h1>
 
       <div className="mb-4">
         <label htmlFor="problemStatement" className="block text-sm font-medium text-gray-700 mb-2">
@@ -64,7 +64,7 @@ export default function HMWPage() {
           onClick={handleGenerateHMW}
           disabled={isLoading || !problemStatement.trim()}
         >
-          {isLoading ? 'Generating...' : 'Generate Insights'}
+          {isLoading ? 'Generating...' : 'Generate'}
         </button>
       </div>
 

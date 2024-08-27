@@ -33,7 +33,7 @@ export async function generateHMW(input: string) {
     const { textStream } = await streamObject({
       model: anthropic('claude-3-haiku-20240307'),
       prompt: `Problem statement: ${input}`,
-      system: `You are a helpful assistant that generates at least 3HMWs for a given problem statement.`,
+      system: `You are a helpful assistant that generates at least 3-4 HMWs for a given problem statement.`,
       schema: z.object({
         hmws: z.array(
           z.object({
