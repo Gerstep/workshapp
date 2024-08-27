@@ -16,7 +16,7 @@ export default function Breadcrumbs() {
           </Link>
         </li>
         {pathSegments.map((segment, index) => {
-          const href = `/${pathSegments.slice(0, index ).join('/')}`;
+          const href = `/${pathSegments.slice(0, index + 1).join('/')}`;
           const isLast = index === pathSegments.length - 1;
           return (
             <li key={segment} className="flex items-center">
