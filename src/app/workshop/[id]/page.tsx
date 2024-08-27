@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+
 
 interface Question {
   id: number;
@@ -15,6 +16,7 @@ interface Answer {
 
 export default function QuestionsPage() {
   const { id } = useParams();
+  const router = useRouter();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
@@ -25,6 +27,9 @@ export default function QuestionsPage() {
     fetchQuestions().finally(() => setIsLoading(false));
   }, [id]);
 
+  const handleFinishWorkshop = () => {
+    router.push(`/workshop/${id}/insights`);
+  };
 
   const fetchQuestions = async () => {
     try {
@@ -128,6 +133,13 @@ export default function QuestionsPage() {
       ) : (
         <p>No questions found.</p>
       )}
+      <button
+        type="button"
+        className="bg-green-700 text-white p-2 rounded mt-20"
+        onClick={handleFinishWorkshop}
+      >
+        Finish Workshop
+      </button>
     </div>
   );
 }
