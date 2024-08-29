@@ -14,7 +14,7 @@ export default function CreateSession({ onSessionCreated }: { onSessionCreated: 
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault();
     if (sessionName.trim() === '') return;
-
+  
     try {
       const response = await fetch('/api/sessions', {
         method: 'POST',
@@ -22,7 +22,7 @@ export default function CreateSession({ onSessionCreated }: { onSessionCreated: 
         body: JSON.stringify({ name: sessionName }),
       });
       const data = await response.json();
-
+  
       if (response.ok) {
         localStorage.setItem(`session_${data.id}`, data.token);
         router.push(`/session/${data.id}`);

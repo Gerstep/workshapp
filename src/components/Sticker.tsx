@@ -43,5 +43,4 @@ const Sticker: React.FC<StickerProps> = ({ id, text, author, votes, onVote, onDe
     </div>
   );
 };
-
 export default Sticker;
