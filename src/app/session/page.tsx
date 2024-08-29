@@ -21,6 +21,7 @@ const MAX_VOTES = 3;
 export default function SessionPage() {
   const [stickers, setStickers] = useState<Sticker[]>([]);
   const [remainingVotes, setRemainingVotes] = useState(MAX_VOTES);
+  const [newStickerText, setNewStickerText] = useState('');
 
   useEffect(() => {
     fetchStickers();
@@ -53,11 +54,21 @@ export default function SessionPage() {
     else setStickers(data);
   };
 
-  const addSticker = async (text: string, author: string) => {
+  const addSticker = async () => {
+    if (newStickerText.trim() === '') {
+      alert('Please enter some text for the sticker.');
+      return;
+    }
+
     const { error } = await supabase
       .from('stickers')
-      .insert({ text, author, votes: 0 });
-    if (error) console.error('Error adding sticker:', error);
+      .insert({ text: newStickerText, author: 'User', votes: 0, sticker_text: newStickerText });
+    if (error) {
+      console.error('Error adding sticker:', error);
+    } else {
+      setNewStickerText(''); // Clear the input after adding
+      fetchStickers(); // Refresh the stickers
+    }
   };
 
   const vote = async (stickerId: string) => {
@@ -114,12 +125,21 @@ export default function SessionPage() {
           />
         ))}
       </div>
-      <button
-        onClick={() => addSticker('New Sticker', 'User')}
-        className="mt-4 bg-blue-500 text-white p-2 rounded"
-      >
-        Add Sticker
-      </button>
+      <div className="mt-4 flex">
+        <input
+          type="text"
+          value={newStickerText}
+          onChange={(e) => setNewStickerText(e.target.value)}
+          placeholder="Enter sticker text"
+          className="flex-grow p-2 border rounded-l"
+        />
+        <button
+          onClick={addSticker}
+          className="bg-blue-500 text-white p-2 rounded-r"
+        >
+          Add Sticker
+        </button>
+      </div>
     </div>
   );
 }
