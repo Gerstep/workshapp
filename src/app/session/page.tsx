@@ -16,11 +16,13 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const MAX_VOTES = 3; 
+
 export default function SessionPage() {
   const [stickers, setStickers] = useState<Sticker[]>([]);
+  const [remainingVotes, setRemainingVotes] = useState(MAX_VOTES);
 
   useEffect(() => {
-    // Initial fetch of stickers
     fetchStickers();
 
     // Set up real-time listener
@@ -35,6 +37,12 @@ export default function SessionPage() {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  const initializeVotes = () => {
+    const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
+    const totalVotesUsed = Object.values(votesUsed).reduce((sum: number, count: any) => sum + count, 0);
+    setRemainingVotes(MAX_VOTES - totalVotesUsed);
+  };
 
   const fetchStickers = async () => {
     const { data, error } = await supabase
@@ -53,8 +61,23 @@ export default function SessionPage() {
   };
 
   const vote = async (stickerId: string) => {
-    const { error } = await supabase.rpc('increment_vote', { sticker_id: stickerId });
-    if (error) console.error('Error voting:', error);
+    if (remainingVotes > 0) {
+      const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
+      if (!votesUsed[stickerId]) {
+        votesUsed[stickerId] = 0;
+      }
+      votesUsed[stickerId]++;
+      localStorage.setItem('votesUsed', JSON.stringify(votesUsed));
+
+      const { error } = await supabase.rpc('increment_vote', { sticker_id: stickerId });
+      if (error) {
+        console.error('Error voting:', error);
+      } else {
+        setRemainingVotes(remainingVotes - 1);
+      }
+    } else {
+      alert('You have used all your votes!');
+    }
   };
 
   const deleteSticker = async (stickerId: string) => {
@@ -63,12 +86,21 @@ export default function SessionPage() {
       .delete()
       .eq('id', stickerId);
     if (error) console.error('Error deleting sticker:', error);
-    else fetchStickers(); // Refresh the stickers after deletion
+    else {
+      // Remove the sticker's votes from localStorage and update remaining votes
+      const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
+      const stickerVotes = votesUsed[stickerId] || 0;
+      delete votesUsed[stickerId];
+      localStorage.setItem('votesUsed', JSON.stringify(votesUsed));
+      setRemainingVotes(remainingVotes + stickerVotes);
+      fetchStickers();
+    }
   };
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Sticker Board</h1>
+      <p className="mb-4">Remaining votes: {remainingVotes}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {stickers.map((sticker) => (
           <Sticker
