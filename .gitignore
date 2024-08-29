@@ -30,7 +30,7 @@ yarn-error.log*
 .env
 
 # My AI logs
-.ai
+ai.md
 
 # vercel
 .vercel
