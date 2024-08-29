@@ -1,7 +1,12 @@
+'use client'
+
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import CreateSession from '@/components/CreateSession';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="text-center">
@@ -52,14 +57,12 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4">
+      <CreateSession onSessionCreated={() => router.push('/session')} />
       <Link href="/session" className='bg-green-600 text-white p-2 rounded text-center'>
           Start a workshop
         </Link>
         <Link href="/hmw" className='bg-blue-500 text-white p-2 rounded text-center'>
           Generate HMWs
-        </Link>
-        <Link href="/questions" className='bg-blue-500 text-white p-2 rounded text-center'>
-          Old Workshops
         </Link>
       </div>
     </main>

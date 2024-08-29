@@ -5,8 +5,17 @@ interface StickerProps {
   text: string;
   author: string;
   votes: number;
+  session_id: string; 
   onVote: (id: string) => void;
   onDelete: (id: string) => void;
+}
+
+export interface StickerType {
+  id: string;
+  text: string;
+  author: string;
+  votes: number;
+  session_id: string;
 }
 
 const Sticker: React.FC<StickerProps> = ({ id, text, author, votes, onVote, onDelete }) => {
