@@ -52,7 +52,9 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4">
-        
+      <Link href="/session" className='bg-green-600 text-white p-2 rounded text-center'>
+          Start a workshop
+        </Link>
         <Link href="/hmw" className='bg-blue-500 text-white p-2 rounded text-center'>
           Generate HMWs
         </Link>
