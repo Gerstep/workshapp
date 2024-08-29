@@ -26,5 +26,7 @@ export async function POST(req: Request) {
 
   await supabase.rpc('set_session_token', { p_token: token });
 
-  return NextResponse.json(data);
+  const shareableLink = `${process.env.NEXT_PUBLIC_BASE_URL}/session/${data.id}?token=${token}`;
+
+  return NextResponse.json({ ...data, shareableLink });
 }

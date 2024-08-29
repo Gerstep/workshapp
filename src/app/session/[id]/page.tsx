@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import Sticker, { StickerType } from '@/components/Sticker';
-import CreateSticker from '@/components/Sticker';
+import CreateSticker from '@/components/CreateSticker';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -66,18 +66,36 @@ export default function SessionPage() {
   };
 
   const handleVote = async (stickerId: string) => {
-    // Implement voting logic
+    const { error } = await supabase.rpc('increment_vote', { sticker_id: stickerId });
+    if (error) {
+      console.error('Error voting:', error);
+    } else {
+      fetchStickers();
+    }
   };
 
   const handleDelete = async (stickerId: string) => {
-    // Implement delete logic
+    const { error } = await supabase
+      .from('stickers')
+      .delete()
+      .eq('id', stickerId);
+    if (error) {
+      console.error('Error deleting sticker:', error);
+    } else {
+      fetchStickers();
+    }
+  };
+
+  const handleStickerCreated = () => {
+    fetchStickers();
   };
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Session: {sessionName}</h1>
       <p className="mb-4">Share this link to join the session: {shareLink}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <CreateSticker sessionId={id} onStickerCreated={handleStickerCreated} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {stickers.map((sticker) => (
           <Sticker
             key={sticker.id}
@@ -91,7 +109,6 @@ export default function SessionPage() {
           />
         ))}
       </div>
-      {/* <Sticker onStickerCreated={() => fetchStickers()} /> */}
     </div>
   );
 }

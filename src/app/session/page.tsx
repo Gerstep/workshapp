@@ -1,14 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
-import Sticker from '@/components/Sticker';
 
-interface Sticker {
+interface Session {
   id: string;
-  text: string;
-  author: string;
-  votes: number;
+  name: string;
 }
 
 const supabase = createClient(
@@ -16,110 +14,56 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const MAX_VOTES = 3; // Easily changeable variable for max allowed votes
-
-export default function SessionPage() {
-  const [stickers, setStickers] = useState<Sticker[]>([]);
-  const [remainingVotes, setRemainingVotes] = useState(MAX_VOTES);
+export default function SessionListPage() {
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Initial fetch of stickers
-    fetchStickers();
-
-    // Set up real-time listener
-    const channel = supabase
-      .channel('public:stickers')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'stickers' }, payload => {
-        fetchStickers();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    fetchSessions();
   }, []);
 
-  const initializeVotes = () => {
-    const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
-    const totalVotesUsed = Object.values(votesUsed).reduce((sum: number, count: any) => sum + count, 0);
-    setRemainingVotes(MAX_VOTES - totalVotesUsed);
-  };
-
-  const fetchStickers = async () => {
+  const fetchSessions = async () => {
+    console.log('Fetching sessions...');
     const { data, error } = await supabase
-      .from('stickers')
-      .select('*')
-      .order('votes', { ascending: false });
-    if (error) console.error('Error fetching stickers:', error);
-    else setStickers(data);
-  };
-
-  const addSticker = async (text: string, author: string) => {
-    const { error } = await supabase
-      .from('stickers')
-      .insert({ text, author, votes: 0 });
-    if (error) console.error('Error adding sticker:', error);
-  };
-
-  const vote = async (stickerId: string) => {
-    if (remainingVotes > 0) {
-      const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
-      if (!votesUsed[stickerId]) {
-        votesUsed[stickerId] = 0;
-      }
-      votesUsed[stickerId]++;
-      localStorage.setItem('votesUsed', JSON.stringify(votesUsed));
-
-      const { error } = await supabase.rpc('increment_vote', { sticker_id: stickerId });
-      if (error) {
-        console.error('Error voting:', error);
-      } else {
-        setRemainingVotes(remainingVotes - 1);
-      }
+      .from('sessions')
+      .select('id, name')
+      .order('created_at', { ascending: false });
+  
+    console.log('Fetched sessions:', data);
+    console.log('Error:', error);
+  
+    if (error) {
+      console.error('Error fetching sessions:', error);
+      setError(error.message);
     } else {
-      alert('You have used all your votes!');
-    }
-  };
-
-  const deleteSticker = async (stickerId: string) => {
-    const { error } = await supabase
-      .from('stickers')
-      .delete()
-      .eq('id', stickerId);
-    if (error) console.error('Error deleting sticker:', error);
-    else {
-      // Remove the sticker's votes from localStorage and update remaining votes
-      const votesUsed = JSON.parse(localStorage.getItem('votesUsed') || '{}');
-      const stickerVotes = votesUsed[stickerId] || 0;
-      delete votesUsed[stickerId];
-      localStorage.setItem('votesUsed', JSON.stringify(votesUsed));
-      setRemainingVotes(remainingVotes + stickerVotes);
-      fetchStickers();
+      console.log('Number of sessions:', data ? data.length : 0);
+      setSessions(data || []);
+      setError(null);
     }
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Sticker Board</h1>
-      <p className="mb-4">Remaining votes: {remainingVotes}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {stickers.map((sticker) => (
-          <Sticker
-            key={sticker.id}
-            id={sticker.id}
-            text={sticker.text}
-            author={sticker.author}
-            votes={sticker.votes}
-            onVote={vote}
-            onDelete={deleteSticker}
-          />
-        ))}
-      </div>
-      <button
-        onClick={() => addSticker('New Sticker', 'User')}
+      <h1 className="text-2xl font-bold mb-4">Active Sessions</h1>
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
+      {sessions.length > 0 ? (
+        <ul className="space-y-2">
+          {sessions.map((session) => (
+            <li key={session.id}>
+              <Link href={`/session/${session.id}`} className="text-blue-500 hover:underline">
+                {session.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No active sessions found.</p>
+      )}
+      <button 
+        onClick={fetchSessions} 
         className="mt-4 bg-blue-500 text-white p-2 rounded"
       >
-        Add Sticker
+        Refresh Sessions
       </button>
     </div>
   );

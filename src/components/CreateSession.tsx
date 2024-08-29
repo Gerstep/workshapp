@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default function CreateSession({ onSessionCreated }: { onSessionCreated: () => void }) {
+export default function CreateSession({ onSessionCreated }: { onSessionCreated: (shareableLink: string) => void }) {
   const [sessionName, setSessionName] = useState('');
   const router = useRouter();
 
@@ -26,7 +26,7 @@ export default function CreateSession({ onSessionCreated }: { onSessionCreated: 
       if (response.ok) {
         localStorage.setItem(`session_${data.id}`, data.token);
         router.push(`/session/${data.id}`);
-        onSessionCreated(); // Call this after successful creation
+        onSessionCreated(data.shareableLink);
       } else {
         throw new Error(data.error);
       }

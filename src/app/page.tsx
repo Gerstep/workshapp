@@ -3,10 +3,19 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import CreateSession from '@/components/CreateSession';
 
 export default function Home() {
   const router = useRouter();
+  const [shareableLink, setShareableLink] = useState<string | null>(null);
+
+  const handleSessionCreated = (link: string) => {
+    setShareableLink(link);
+    const sessionId = link.split('/').pop()?.split('?')[0];
+    router.push(`/session/${sessionId}`);
+  };
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="text-center">
@@ -57,8 +66,20 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4">
-      <CreateSession onSessionCreated={() => router.push('/session')} />
-      <Link href="/session" className='bg-green-600 text-white p-2 rounded text-center'>
+        <CreateSession onSessionCreated={handleSessionCreated} />
+        {shareableLink && (
+          <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded">
+            <p className="mb-2">Share this link with participants:</p>
+            <input
+              type="text"
+              value={shareableLink}
+              readOnly
+              className="w-full p-2 border rounded"
+              onClick={(e) => e.currentTarget.select()}
+            />
+          </div>
+        )}
+        <Link href="/session" className='bg-green-600 text-white p-2 rounded text-center'>
           Start a workshop
         </Link>
         <Link href="/hmw" className='bg-blue-500 text-white p-2 rounded text-center'>
