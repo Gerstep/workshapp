@@ -50,37 +50,17 @@ export default function Home() {
                 <td className="border border-white/30 p-3">Limited by schedules</td>
                 <td className="border border-white/30 p-3 font-semibold text-blue-600">24/7 on-demand</td>
               </tr>
-              <tr>
-                <td className="border border-white/30 p-3">Scalability</td>
-                <td className="border border-white/30 p-3">Limited to physical space</td>
-                <td className="border border-white/30 p-3 font-semibold text-blue-600">Unlimited participants</td>
-              </tr>
-              <tr>
-                <td className="border border-white/30 p-3">Customization</td>
-                <td className="border border-white/30 p-3">Depends on facilitator</td>
-                <td className="border border-white/30 p-3 font-semibold text-blue-600">Highly adaptable</td>
-              </tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
+        <h3 className='text-2xl font-bold'>Start a new branding workshop session</h3>
         <CreateSession onSessionCreated={handleSessionCreated} />
-        {shareableLink && (
-          <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded">
-            <p className="mb-2">Share this link with participants:</p>
-            <input
-              type="text"
-              value={shareableLink}
-              readOnly
-              className="w-full p-2 border rounded"
-              onClick={(e) => e.currentTarget.select()}
-            />
-          </div>
-        )}
-        <Link href="/session" className='bg-green-600 text-white p-2 rounded text-center'>
-          Start a workshop
+        <h3 className='text-2xl font-bold'>Or join an existing workshop</h3>
+        <Link href="/session" className='bg-blue-500 text-white p-2 rounded text-center'>
+          Your live workshops
         </Link>
         <Link href="/hmw" className='bg-blue-500 text-white p-2 rounded text-center'>
           Generate HMWs

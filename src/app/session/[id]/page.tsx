@@ -16,6 +16,7 @@ export default function SessionPage() {
   const [sessionName, setSessionName] = useState('');
   const [stickers, setStickers] = useState<StickerType[]>([]);
   const [shareLink, setShareLink] = useState('');
+  const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
     fetchSessionData();
@@ -90,24 +91,76 @@ export default function SessionPage() {
     fetchStickers();
   };
 
+  const steps = [
+    {
+      type: 'text',
+      content: 'Welcome to the session. This is the first step. Click next to proceed.',
+    },
+    {
+      type: 'text',
+      content: 'This is the second step. Follow the instructions and click next to proceed.',
+    },
+    {
+      type: 'interactive',
+      content: 'This is the interactive step. Add your stickers below.',
+    },
+  ];
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Session: {sessionName}</h1>
       <p className="mb-4">Share this link to join the session: {shareLink}</p>
-      <CreateSticker sessionId={id} onStickerCreated={handleStickerCreated} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        {stickers.map((sticker) => (
-          <Sticker
-            key={sticker.id}
-            id={sticker.id}
-            text={sticker.text}
-            author={sticker.author}
-            votes={sticker.votes}
-            session_id={id}
-            onVote={handleVote}
-            onDelete={handleDelete}
-          />
-        ))}
+      {steps[currentStep].type === 'text' && (
+        <div>
+          <p>{steps[currentStep].content}</p>
+        </div>
+      )}
+      {steps[currentStep].type === 'interactive' && (
+        <div>
+          <CreateSticker sessionId={id} onStickerCreated={handleStickerCreated} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {stickers.map((sticker) => (
+              <Sticker
+                key={sticker.id}
+                id={sticker.id}
+                text={sticker.text}
+                author={sticker.author}
+                votes={sticker.votes}
+                session_id={id}
+                onVote={handleVote}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={handlePrevious}
+          disabled={currentStep === 0}
+          className="bg-gray-500 text-white p-2 rounded"
+        >
+          Back
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={currentStep === steps.length - 1}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

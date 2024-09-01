@@ -36,15 +36,15 @@ export default function CreateSession({ onSessionCreated }: { onSessionCreated: 
   };
 
   return (
-    <form onSubmit={handleCreateSession} className="flex flex-col gap-2">
+    <form onSubmit={handleCreateSession} className="flex gap-2">
       <input
         type="text"
         value={sessionName}
         onChange={(e) => setSessionName(e.target.value)}
         placeholder="Enter session name"
-        className="border p-2 rounded"
+        className="border p-2 rounded flex-grow"
       />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+      <button type="submit" className="bg-green-500 text-white p-2 rounded">
         Create Session
       </button>
     </form>
