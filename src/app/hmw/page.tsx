@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { generateHMW } from '@/app/actions';
+import { generateHMW } from '@/actions/hmw';
 import { readStreamableValue } from 'ai/rsc';
 export const maxDuration = 30;
 

@@ -99,7 +99,7 @@ export default function SessionPage() {
           />
         );
       case 'analysis':
-        return <AnalysisPage page={currentPage} sessionId={id} stepTitle={currentStep.title} />;
+        return <AnalysisPage page={currentPage} sessionId={id} stepTitle={currentStep.title} stickers={stickers} />;
       case 'custom':
         if (currentPage.component) {
           const CustomComponent = currentPage.component;
