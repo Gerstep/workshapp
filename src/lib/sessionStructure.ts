@@ -14,22 +14,22 @@ export interface Step {
 
 export const sessionSteps: Step[] = [
   {
-    title: 'Ideas Brainstorming',
+    title: 'Branding and Positioning Workshop',
     pages: [
       {
         type: 'instructions',
-        title: 'Brainstorming Instructions',
-        content: 'In this step, we will brainstorm ideas for our project. Follow these guidelines...',
+        title: 'Customer Persona',
+        content: 'In this step, we will create a customer persona for our project. Your goal is to write a short description of the customer you are targeting. You can add as many stickers as you want, but it should be concise and to the point. For example: "Crypto Enthusiasts", "Young Professionals", "Parents", "Tech Savvy", "Environmental Activists", etc. Once you are ready to move to the next step, click on the "Next" button.',
       },
       {
         type: 'workshop',
         title: 'Idea Generation',
-        content: 'Add your ideas as stickers and vote on the best ones.',
+        content: 'Add your ideas as stickers. You can get inspiration from stickers added by other participants. Once you\'re done, you can start voting on the best ideas. You can vote for multiple ideas, but you only have three votes. The voting will be open for 30 minutes. After that, the voting will close and the AI will analyze the ideas and provide insights.',
       },
       {
         type: 'analysis',
         title: 'AI Analysis of Ideas',
-        content: 'Our AI will analyze the generated ideas and provide insights.',
+        content: 'Now, AI will analyze the generated ideas and provide insights.',
       },
     ],
   },

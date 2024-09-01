@@ -52,6 +52,13 @@ export async function voteSticker(stickerId: string): Promise<void> {
   }
 }
 
+export async function unvoteSticker(stickerId: string): Promise<void> {
+  const { error } = await supabase.rpc('decrement_vote', { sticker_id: stickerId });
+  if (error) {
+    console.error('Error unvoting:', error);
+  }
+}
+
 export async function deleteSticker(stickerId: string): Promise<void> {
   const { error } = await supabase
     .from('stickers')

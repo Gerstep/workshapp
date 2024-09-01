@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { StickerType } from '@/components/Sticker';
-import { fetchSessionName, fetchStickers, setupRealtimeSubscription, voteSticker, deleteSticker } from '@/lib/database';
+import { fetchSessionName, fetchStickers, setupRealtimeSubscription, voteSticker, unvoteSticker, deleteSticker } from '@/lib/database';
 import { sessionSteps, Step, StepPage } from '@/lib/sessionStructure';
 import InstructionsPage from '@/components/InstructionsPage';
 import WorkshopPage from '@/components/WorkshopPage';
@@ -40,6 +40,12 @@ export default function SessionPage() {
 
   const handleVote = async (stickerId: string) => {
     await voteSticker(stickerId);
+    const updatedStickers = await fetchStickers(id);
+    setStickers(updatedStickers);
+  };
+
+  const handleUnvote = async (stickerId: string) => {
+    await unvoteSticker(stickerId);
     const updatedStickers = await fetchStickers(id);
     setStickers(updatedStickers);
   };
@@ -88,6 +94,7 @@ export default function SessionPage() {
             stickers={stickers}
             onStickerCreated={handleStickerCreated}
             onVote={handleVote}
+            onUnvote={handleUnvote}
             onDelete={handleDelete}
           />
         );
@@ -109,7 +116,7 @@ export default function SessionPage() {
       Session: {sessionName}
       <ShareLink link={shareLink} />
       <div className="mb-4">
-        <h2 className="text-4xl font-semibold">Exercise: {currentStep.title}</h2>
+        <h2 className="text-4xl font-semibold">{currentStep.title}</h2>
         <h2 className="text-3xl mt-6 font-semibold">{currentPage.title}</h2>
       </div>
       {renderPage()}

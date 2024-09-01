@@ -26,23 +26,25 @@ export default function CreateSticker({ sessionId, onStickerCreated }: CreateSti
 
   return (
     <form onSubmit={handleSubmit} className="mb-4">
-      <input
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Sticker text"
-        className="border p-2 mr-2"
-        required
-      />
-      <input
-        type="text"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        placeholder="Your name"
-        className="border p-2 mr-2"
-        required
-      />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+      <div className="flex mb-2">
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Sticker text"
+          className="border p-2 mr-2 w-[70%]"
+          required
+        />
+        <input
+          type="text"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          placeholder="Your name"
+          className="border p-2 w-[30%]"
+          required
+        />
+      </div>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
         Add Sticker
       </button>
     </form>
