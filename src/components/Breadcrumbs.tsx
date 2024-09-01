@@ -7,6 +7,10 @@ export default function Breadcrumbs() {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(segment => segment);
 
+  if (pathname === '/') {
+    return null;
+  }
+
   return (
     <nav className="text-sm mb-4">
       <ol className="list-none p-0 inline-flex">

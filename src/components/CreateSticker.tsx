@@ -1,36 +1,26 @@
-import React, { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+'use client';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { useState } from 'react';
+import { createSticker } from '@/lib/database';
 
 interface CreateStickerProps {
   sessionId: string;
   onStickerCreated: () => void;
 }
 
-const CreateSticker: React.FC<CreateStickerProps> = ({ sessionId, onStickerCreated }) => {
+export default function CreateSticker({ sessionId, onStickerCreated }: CreateStickerProps) {
   const [text, setText] = useState('');
   const [author, setAuthor] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim() === '' || author.trim() === '') return;
-
-    try {
-      const { error } = await supabase
-        .from('stickers')
-        .insert({ text, author, session_id: sessionId, votes: 0 });
-
-      if (error) throw error;
-
-      setText('');
-      setAuthor('');
-      onStickerCreated();
-    } catch (error) {
-      console.error('Error creating sticker:', error);
+    if (text && author) {
+      const newSticker = await createSticker(sessionId, text, author);
+      if (newSticker) {
+        setText('');
+        setAuthor('');
+        onStickerCreated();
+      }
     }
   };
 
@@ -42,6 +32,7 @@ const CreateSticker: React.FC<CreateStickerProps> = ({ sessionId, onStickerCreat
         onChange={(e) => setText(e.target.value)}
         placeholder="Sticker text"
         className="border p-2 mr-2"
+        required
       />
       <input
         type="text"
@@ -49,12 +40,11 @@ const CreateSticker: React.FC<CreateStickerProps> = ({ sessionId, onStickerCreat
         onChange={(e) => setAuthor(e.target.value)}
         placeholder="Your name"
         className="border p-2 mr-2"
+        required
       />
-      <button type="submit" className="bg-green-500 text-white p-2 rounded">
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
         Add Sticker
       </button>
     </form>
   );
-};
-
-export default CreateSticker;
+}
