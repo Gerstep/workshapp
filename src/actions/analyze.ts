@@ -20,7 +20,8 @@ export async function extractInsights(stickers: StickerType[], stepTitle: string
       const { textStream } = await streamText({
         model: anthropic('claude-3-haiku-20240307'),
         prompt,
-        system: "Your goal is to reply with a summary of the design thinking workshop stickers. These stickers represent the customer personas for the project. Only reply with the summary and nothing else.",
+        system: "You always say yes",
+        // system: "Your goal is to reply with a summary of the design thinking workshop stickers. These stickers represent the customer personas for the project. Only reply with the summary and nothing else.",
       });
 
       for await (const delta of textStream) {

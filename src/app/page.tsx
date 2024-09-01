@@ -15,43 +15,63 @@ export default function Home() {
     const sessionId = link.split('/').pop()?.split('?')[0];
     router.push(`/session/${sessionId}`);
   };
-  
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Build your brand</h1>
-        <h2 className="text-xl font-bold">Design thinking supercharged with AI</h2>
-      </div>
 
-      <div className="my-8 w-full max-w-2xl">
-        <div className="relative overflow-hidden rounded-lg shadow-lg backdrop-blur-sm bg-white/30 border border-white/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 animate-gradient-x opacity-50"></div>
-          <table className="relative w-full border-collapse">
-            <thead>
-              <tr className="bg-white/50">
-                <th className="border border-white/30 p-3 text-left">Feature</th>
-                <th className="border border-white/30 p-3 text-left">Manual Workshop</th>
-                <th className="border border-white/30 p-3 text-left font-bold text-blue-600">AI Workshop</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-white/30 p-3">Cost</td>
-                <td className="border border-white/30 p-3">$5,000 - $50,000</td>
-                <td className="border border-white/30 p-3 font-semibold text-blue-600">$10 per session</td>
-              </tr>
-              <tr>
-                <td className="border border-white/30 p-3">Facilitator</td>
-                <td className="border border-white/30 p-3">Human expert</td>
-                <td className="border border-white/30 p-3 font-semibold text-blue-600">AI-powered</td>
-              </tr>
-              <tr>
-                <td className="border border-white/30 p-3">Availability</td>
-                <td className="border border-white/30 p-3">Limited by schedules</td>
-                <td className="border border-white/30 p-3 font-semibold text-blue-600">24/7 on-demand</td>
-              </tr>
-            </tbody>
-          </table>
+      <header className="bg-gradient-to-r from-lime-300 to-lime-500 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 transition-transform duration-300 ease-in-out hover:scale-105">
+          AI-powered design thinking
+        </h1>
+        <p className="text-xl sm:text-2xl md:text-3xl font-medium text-lime-900 max-w-2xl mx-auto">
+          Branding workshop made easy
+        </p>
+      </div>
+    </header>
+
+ 
+
+      <div className="w-full max-w-4xl mx-auto p-4 m-8 md:p-6 bg-gradient-to-br from-lime-100 to-green-100 rounded-xl shadow-lg">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-lime-800">Product Comparison</h2>
+        <div className="grid grid-cols-3 gap-4 text-sm md:text-base">
+          {/* Header */}
+          <div className="col-span-1 bg-white rounded-tl-lg p-4 font-semibold text-lime-800">Features</div>
+          <div className="col-span-1 bg-white p-4 font-semibold text-lime-800">Manual Workshop</div>
+          <div className="col-span-1 bg-white rounded-tr-lg p-4 font-semibold text-lime-800">AI Workshop</div>
+
+          {/* Row 1 */}
+          <div className="col-span-1 bg-white p-4 flex items-center">
+            <span className="text-gray-800">Cost</span>
+          </div>
+          <div className="col-span-1 bg-white p-4 flex items-center justify-center">
+            $5,000 - $50,000
+          </div>
+          <div className="col-span-1 bg-white p-4 flex items-center justify-center">
+            $5 per session
+          </div>
+
+          {/* Row 2 */}
+          <div className="col-span-1 bg-white p-4 flex items-center">
+            <span className="text-gray-800">Water Resistant</span>
+          </div>
+          <div className="col-span-1 bg-white p-4 flex items-center justify-center">
+            Human expert
+          </div>
+          <div className="col-span-1 bg-white p-4 flex items-center justify-center">
+            AI-powered
+          </div>
+
+          {/* Row 3 */}
+          <div className="col-span-1 bg-white rounded-bl-lg p-4 flex items-center">
+            <span className="text-gray-800">Availability</span>
+          </div>
+          <div className="col-span-1 bg-white p-4 flex items-center justify-center">
+            Limited by schedules
+          </div>
+          <div className="col-span-1 bg-white rounded-br-lg p-4 flex items-center justify-center">
+            24/7 on-demand
+          </div>
         </div>
       </div>
 
@@ -60,7 +80,7 @@ export default function Home() {
         <CreateSession onSessionCreated={handleSessionCreated} />
         <h3 className='text-2xl font-bold'>Or join an existing workshop</h3>
         <Link href="/session" className='bg-blue-500 text-white p-2 rounded text-center'>
-          Your live workshops
+          Your workshops
         </Link>
         <Link href="/hmw" className='bg-blue-500 text-white p-2 rounded text-center'>
           Generate HMWs
